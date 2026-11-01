@@ -1,7 +1,18 @@
 # Obedové menu v okolí FEI STU (WEBTE1, zadanie č. 2)
 
 Autor: Samuel Piteľ
-https://webte1.fei.stuba.sk/~xpitels/Z2_Pite%c4%be/index.html
+Web na školskom serveri: https://webte1.fei.stuba.sk/~xpitels/Z2_Pite%c4%be/index.html
+
+## Reštaurácie (zdroje)
+
+| Reštaurácia | Pôvodná stránka | Lokálna kópia |
+|---|---|---|
+| Reštaurácia Drag | https://www.restauracia-drag.sk/restauracia-drag | `source/Reštaurácia_DRAG_menu.html` |
+| Naše Hospoda Karloveská | https://nasehospoda-karloveska.sk/ | `source/Naše Hospoda Karloveská _ Bratislava - Karlova Ves.html` |
+| Jedna Báseň | https://www.jednabasen.sk/ | `source/Jedna_basen_menu.html` |
+
+Podľa spresnenia k bodu (3) sa načítavajú lokálne kópie stránok, proxy sa nepoužíva.
+
 
 ## Použité knižnice
 
@@ -24,12 +35,4 @@ Licencia: **SIL Open Font License 1.1**, plné znenie je v `fonts/LICENSE-Poppin
 
 ## Použitie AI nástrojov
 
-Pri vypracovaní bol použitý AI asistent **Claude (Anthropic)**. Pomohol s parserom pre
-reštauráciu Jedna Báseň, s úpravou kódu na Bootstrap a jQuery, s lokálnym fontom
-a s textami README a stránky „O projekte“. Za obsah a funkčnosť riešenia
-zodpovedá autor, ktorý ho vie vysvetliť.
-
-## Validácia
-
-Výpisy z validátorov (https://validator.w3.org/ a https://jigsaw.w3.org/css-validator/)
-patria do priečinka `docs/`.
+AI som využíval pri javascripte. Taktiež som ho využil na vygenerovanie favicon obrázku. A na skontrolovanie zadania či spĺňa to čo má. Požíval som Claude.
