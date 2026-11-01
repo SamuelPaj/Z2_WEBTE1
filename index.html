@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Samuel Piteľ">
+  <meta name="description" content="Denné menu reštaurácií a jedální v okolí FEI STU v Bratislave.">
+  <title>Obedové menu v okolí fakulty | FEI STU</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container py-4">
+      <h1 class="h2 mb-1">Obedové menu v okolí fakulty</h1>
+      <p class="mb-3 lead">Denné menu blízkych reštaurácií na jednom mieste, rozdelené podľa dní v týždni.</p>
+
+      <nav aria-label="Dni v týždni">
+        <ul id="day-nav" class="nav nav-pills gap-1"></ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container my-4">
+    <section aria-labelledby="controls-title" class="mb-4">
+      <h2 id="controls-title" class="h5">Nastavenia</h2>
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <button type="button" id="refresh" class="btn btn-primary btn-sm">Obnoviť menu</button>
+        <p id="status" class="mb-0 text-body-secondary" role="status" aria-live="polite"></p>
+      </div>
+      <fieldset class="mt-3">
+        <legend class="h6">Zobraziť reštaurácie</legend>
+        <div id="filters"></div>
+      </fieldset>
+    </section>
+
+    <section aria-labelledby="menu-title">
+      <h2 id="menu-title" class="h5 mb-3">Menu: <span id="selected-day-label"></span></h2>
+      <div id="cards" class="row g-3"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer py-3">
+    <div class="container small">
+      <p class="mb-1">Autor: Samuel Piteľ · Predmet WEBTE1 · FEI STU v Bratislave</p>
+      <p class="mb-0">Dnes je <time id="today-time"></time>. Menu sa načítava priamo z webových stránok reštaurácií.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

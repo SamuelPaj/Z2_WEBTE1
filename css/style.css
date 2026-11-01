@@ -1,0 +1,81 @@
+:root {
+  --stu-blue: #0b4f8a;
+  --stu-blue-dark: #083a66;
+  --paper: #f5f7fa;
+}
+
+body {
+  background: var(--paper);
+}
+
+.site-header {
+  background: var(--stu-blue);
+  color: #fff;
+}
+
+.site-header .nav-link {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .4);
+}
+
+.site-header .nav-link:hover {
+  background: rgba(255, 255, 255, .15);
+}
+
+.site-header .nav-link.active {
+  background: #fff;
+  color: var(--stu-blue-dark);
+  font-weight: 600;
+}
+
+.site-footer {
+  background: var(--stu-blue-dark);
+  color: #dbe6f2;
+}
+
+.card-header {
+  background: #fff;
+  border-bottom: 3px solid var(--stu-blue);
+}
+
+.card-header a {
+  color: var(--stu-blue-dark);
+  text-decoration: none;
+}
+
+.card-header a:hover {
+  text-decoration: underline;
+}
+
+.menu-list li {
+  padding: .35rem 0;
+  border-bottom: 1px solid #e5e9ee;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.menu-list li:last-child {
+  border-bottom: 0;
+}
+
+.menu-price {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.day-block + .day-block {
+  margin-top: 1rem;
+}
+
+.day-block h3 {
+  font-size: 1rem;
+  margin-bottom: .25rem;
+  color: var(--stu-blue-dark);
+}
+
+.is-today h3::after {
+  content: " (dnes)";
+  font-weight: 400;
+  color: #6c757d;
+}
