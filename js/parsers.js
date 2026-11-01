@@ -24,7 +24,6 @@ function dayIndex(name) {
   return DAY_NAMES.findIndex((day) => day.toLowerCase() === wanted);
 }
 
-/* Veľké písmená zmení na vetu: "KURACIE PRSIA" → "Kuracie prsia". */
 function sentenceCase(value) {
   const letters = value.replace(/[^\p{L}]/gu, "");
   const upper = letters.replace(/[^\p{Lu}]/gu, "");
@@ -99,7 +98,7 @@ function parseHospoda(doc) {
   doc.querySelectorAll("section#menu article").forEach((article) => {
     const dayEl = article.querySelector("div.text-xs.font-bold.uppercase");
     const index = dayEl ? dayIndex(textOf(dayEl)) : -1;
-    if (index === -1) return; // napr. blok „Špeciál“ nie je deň v týždni
+    if (index === -1) return;
 
     const items = [];
     article.querySelectorAll(".divide-y > div").forEach((row) => {
@@ -132,19 +131,74 @@ function parseHospoda(doc) {
   return days;
 }
 
-function parseDoncos(doc) {
-  const img = doc.querySelector('img[alt*="menu" i][src*="wixstatic"]');
-  if (!img) throw new Error("obrázok s menu sa nenašiel");
-
-  const item = {
-    type: "image",
-    src: img.getAttribute("src"),
-    title: cleanText(img.getAttribute("alt")) || "Denné menu",
-    amount: "",
-    allergens: "",
-    price: null
+function extractAllergens(value) {
+  const match = value.match(/\s*\/\s*A\s*:?\s*([\d,\s]*)\/?\s*$/i);
+  if (!match) return { text: value, allergens: "" };
+  return {
+    text: cleanText(value.slice(0, match.index)),
+    allergens: match[1].replace(/\s/g, "").replace(/,+$/, "")
   };
-  return DAY_NAMES.slice(0, 5).map((day) => ({ day, date: "", items: [item] }));
+}
+
+function parseEuroPrice(value) {
+  const match = (value || "").match(/€\s*(\d+(?:[.,]\d+)?)/);
+  return match ? parseFloat(match[1].replace(",", ".")) : null;
+}
+
+function parseJednaBasen(doc) {
+  const days = [];
+
+  doc.querySelectorAll('div[id^="menu-menu-"].menuv2-section').forEach((section) => {
+    const heading = textOf(section.querySelector(".m-list__title-text"));
+    const dayMatch = heading.match(/pondelok|utorok|streda|štvrtok|piatok/i);
+    if (!dayMatch) return;
+    const dateMatch = heading.match(/\d{1,2}\.\s*\d{1,2}\.\s*\d{4}/);
+
+    const items = [];
+
+    const description = section.querySelector(".m-list__description");
+    if (description) {
+      const walker = document.createTreeWalker(description, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        const line = cleanText(node.textContent);
+        if (!line) continue;
+        const { text, allergens } = extractAllergens(line);
+        const volume = text.match(/\s+(\d+(?:[.,]\d+)?\s*(?:ml|l))$/i);
+        items.push({
+          type: "soup",
+          title: sentenceCase(volume ? cleanText(text.slice(0, volume.index)) : text),
+          amount: volume ? volume[1].replace(/\s/g, "") : "",
+          allergens,
+          price: null
+        });
+      }
+    }
+
+    section.querySelectorAll("li.m-list__item").forEach((li) => {
+      const titleEl = li.querySelector(".m-item__title");
+      if (!titleEl) return;
+
+      const fromTitle = extractAllergens(textOf(titleEl));
+      const { amount, title } = splitAmount(fromTitle.text);
+
+      const extra = extractAllergens(textOf(li.querySelector(".m-item__description")));
+      const fullAmount = extra.text.match(/^\d+(?:\/\d+)*\s*g(?:\s*\/\s*\d+\s*g)?$/i);
+
+      const priceText = textOf(li.querySelector(".add-button"));
+      items.push({
+        type: "main",
+        title: sentenceCase(title),
+        amount: fullAmount ? fullAmount[0].replace(/\s/g, "") : amount,
+        allergens: fromTitle.allergens || extra.allergens,
+        price: parseEuroPrice(priceText),
+        priceFrom: /^od\b/i.test(priceText)
+      });
+    });
+
+    days.push({ day: DAY_NAMES[dayIndex(dayMatch[0])], date: dateMatch ? dateMatch[0].replace(/\s/g, "") : "", items });
+  });
+
+  return days;
 }
 
 const SOURCES = [
@@ -165,11 +219,11 @@ const SOURCES = [
     parse: parseHospoda
   },
   {
-    id: "doncos",
-    name: "Don Co's",
-    address: "Staré Grunty 23, Bratislava – Karlova Ves",
-    website: "https://www.doncos.sk/denné-menu",
-    localUrl: "source/Denné menu _ DoNčos.html",
-    parse: parseDoncos
+    id: "jedna-basen",
+    name: "Jedna Báseň",
+    address: "Pribišova 3173/6, Bratislava – Karlova Ves",
+    website: "https://www.jednabasen.sk/restauracja/jedna-basen-karlova-ves",
+    localUrl: "source/Jedna_basen_menu.html",
+    parse: parseJednaBasen
   }
 ];
