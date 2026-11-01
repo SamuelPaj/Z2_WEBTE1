@@ -5,6 +5,7 @@ const ALL_WEEK = "all";
 const STORAGE_PREFIX = "obedove-menu:";
 
 
+<<<<<<< HEAD
 const statusText = document.getElementById("status");
 const refreshButton = document.getElementById("refresh");
 const clearButton = document.getElementById("clear");
@@ -13,6 +14,16 @@ const filters = document.getElementById("filters");
 const dayNav = document.getElementById("day-nav");
 const dayLabel = document.getElementById("selected-day-label");
 const weekendNote = document.getElementById("weekend-note");
+=======
+const $statusText = $("#status");
+const $refreshButton = $("#refresh");
+const $clearButton = $("#clear");
+const $cards = $("#cards");
+const $filters = $("#filters");
+const $dayNav = $("#day-nav");
+const $dayLabel = $("#selected-day-label");
+const $weekendNote = $("#weekend-note");
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
 
 const now = new Date();
 const todayIndex = (now.getDay() + 6) % 7;
@@ -63,6 +74,7 @@ function clearStored() {
 }
 
 async function loadSource(source) {
+<<<<<<< HEAD
   let response;
   try {
     response = await fetch(source.localUrl);
@@ -74,6 +86,20 @@ async function loadSource(source) {
   }
 
   const doc = parseHtml(await response.text());
+=======
+  let html;
+  try {
+    // jQuery AJAX: lokálna kópia stránky sa načíta asynchrónne ako text
+    html = await $.ajax({ url: source.localUrl, method: "GET", dataType: "text", cache: false });
+  } catch (jqXHR) {
+    if (jqXHR && jqXHR.status) {
+      throw new Error(`Stránka reštaurácie je nedostupná (chyba ${jqXHR.status}).`);
+    }
+    throw new Error("Stránka reštaurácie je momentálne nedostupná.");
+  }
+
+  const doc = parseHtml(html);
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
 
   let days;
   try {
@@ -117,18 +143,34 @@ async function loadOne(source, force = false) {
 }
 
 async function loadAll(force = false) {
+<<<<<<< HEAD
   refreshButton.disabled = true;
   cards.setAttribute("aria-busy", "true");
   statusText.textContent = "Načítavam menu…";
+=======
+  $refreshButton.prop("disabled", true);
+  $cards.attr("aria-busy", "true");
+  $statusText.text("Načítavam menu…");
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
 
   const outcomes = await Promise.allSettled(SOURCES.map((source) => loadOne(source, force)));
   const failed = outcomes.filter((outcome) => outcome.status === "rejected").length;
 
+<<<<<<< HEAD
   statusText.textContent = failed
     ? `Načítané ${SOURCES.length - failed} z ${SOURCES.length} reštaurácií. Pri ${failed} sa vyskytla chyba.`
     : `Menu je pripravené (${SOURCES.length} z ${SOURCES.length} reštaurácií).`;
   cards.setAttribute("aria-busy", "false");
   refreshButton.disabled = false;
+=======
+  $statusText.text(
+    failed
+      ? `Načítané ${SOURCES.length - failed} z ${SOURCES.length} reštaurácií. Pri ${failed} sa vyskytla chyba.`
+      : `Menu je pripravené (${SOURCES.length} z ${SOURCES.length} reštaurácií).`
+  );
+  $cards.attr("aria-busy", "false");
+  $refreshButton.prop("disabled", false);
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
 }
 
 function el(tag, className, text) {
@@ -171,7 +213,11 @@ function createDayBlock(entry, dayName, showHeading) {
   if (showHeading) {
     const heading = el("h4", "day-heading", dayName);
     if (entry?.date) heading.append(createTime(entry.date));
+<<<<<<< HEAD
     if (dayName === todayName) heading.append(el("span", "badge", "dnes"));
+=======
+    if (dayName === todayName) heading.append(el("span", "badge rounded-pill text-bg-primary", "dnes"));
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
     block.append(heading);
   } else if (entry?.date) {
     const line = el("p", "day-date");
@@ -225,7 +271,11 @@ function createCard(source) {
   link.rel = "noopener";
   title.append(link);
   if (result.state === "loading") {
+<<<<<<< HEAD
     const spinner = el("span", "spinner");
+=======
+    const spinner = el("span", "spinner-border spinner-border-sm text-primary");
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
     spinner.setAttribute("role", "status");
     spinner.setAttribute("aria-label", "Načítava sa");
     title.append(spinner);
@@ -237,16 +287,29 @@ function createCard(source) {
   if (result.state === "loading") {
     body.append(el("p", "message-info", "Načítavam denné menu…"));
   } else if (result.state === "error") {
+<<<<<<< HEAD
     const box = el("div", "message-error");
     box.append(el("p", "", `Menu sa nepodarilo načítať. ${result.error.message}`));
     const retry = el("button", "btn btn-ghost", "Skúsiť znova");
+=======
+    const box = el("div", "alert alert-danger");
+    box.setAttribute("role", "alert");
+    box.append(el("p", "", `Menu sa nepodarilo načítať. ${result.error.message}`));
+    const retry = el("button", "btn btn-outline-primary btn-sm", "Skúsiť znova");
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
     retry.type = "button";
     retry.addEventListener("click", () => loadOne(source, true).catch(() => {}));
     box.append(retry);
     body.append(box);
   } else if (result.state === "ok") {
     if (result.warning) {
+<<<<<<< HEAD
       body.append(el("p", "message-warn", `Aktualizácia zlyhala (${result.warning}) Zobrazujú sa predtým uložené dáta.`));
+=======
+      const warn = el("div", "alert alert-warning", `Aktualizácia zlyhala (${result.warning}) Zobrazujú sa predtým uložené dáta.`);
+      warn.setAttribute("role", "alert");
+      body.append(warn);
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
     }
     body.append(createMenuContent(result.days));
   } else {
@@ -264,6 +327,7 @@ function createCard(source) {
   }
 
   card.append(header, body, footer);
+<<<<<<< HEAD
   return card;
 }
 
@@ -275,10 +339,29 @@ function renderCards() {
     return;
   }
   cards.replaceChildren(...visible.map(createCard));
+=======
+
+  const column = el("div", "col-12 col-md-6 col-xl");
+  column.append(card);
+  return column;
+}
+
+function renderCards() {
+  $dayLabel.text(selectedDay === ALL_WEEK ? "celý týždeň" : selectedDay);
+  const visible = SOURCES.filter((source) => !hiddenSources.has(source.id));
+  if (visible.length === 0) {
+    const empty = el("div", "col-12");
+    empty.append(el("p", "empty", "Nie je vybraná žiadna reštaurácia. Zapnite aspoň jednu vo filtri."));
+    $cards.empty().append(empty);
+    return;
+  }
+  $cards.empty().append(visible.map(createCard));
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
 }
 
 function renderDayNav() {
   const tabs = [...WORK_DAYS, ALL_WEEK];
+<<<<<<< HEAD
   dayNav.replaceChildren(
     ...tabs.map((value) => {
       const li = el("li");
@@ -287,17 +370,34 @@ function renderDayNav() {
       if (value === selectedDay) button.setAttribute("aria-current", "true");
       if (value === todayName) button.append(el("span", "today-mark", "dnes"));
       button.addEventListener("click", () => {
+=======
+  $dayNav.empty().append(
+    tabs.map((value) => {
+      const $button = $("<button>", {
+        type: "button",
+        class: "nav-link" + (value === selectedDay ? " active" : ""),
+        text: value === ALL_WEEK ? "Celý týždeň" : value
+      });
+      if (value === selectedDay) $button.attr("aria-current", "true");
+      if (value === todayName) $button.append($("<span>", { class: "today-mark", text: "dnes" }));
+      $button.on("click", () => {
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
         selectedDay = value;
         renderDayNav();
         renderCards();
       });
+<<<<<<< HEAD
       li.append(button);
       return li;
+=======
+      return $("<li>", { class: "nav-item" }).append($button)[0];
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
     })
   );
 }
 
 function renderFilters() {
+<<<<<<< HEAD
   for (const source of SOURCES) {
     const label = el("label");
     const checkbox = el("input");
@@ -331,3 +431,36 @@ renderFilters();
 renderDayNav();
 renderCards();
 loadAll(false);
+=======
+  SOURCES.forEach((source) => {
+    const inputId = `filter-${source.id}`;
+    const $input = $("<input>", { type: "checkbox", class: "form-check-input", id: inputId, checked: true, role: "switch" });
+    $input.on("change", () => {
+      if ($input.prop("checked")) hiddenSources.delete(source.id);
+      else hiddenSources.add(source.id);
+      renderCards();
+    });
+    const $label = $("<label>", { class: "form-check-label", for: inputId, text: source.name });
+    $filters.append($("<div>", { class: "form-check form-switch" }).append($input, $label));
+  });
+}
+
+$refreshButton.on("click", () => loadAll(true));
+
+$clearButton.on("click", () => {
+  clearStored();
+  for (const source of SOURCES) results[source.id] = { state: "empty" };
+  renderCards();
+  $statusText.text("Uložené dáta boli vymazané.");
+});
+
+$(function () {
+  $("#today-time").attr("datetime", todayKey()).text(`${todayName} ${now.toLocaleDateString("sk-SK")}`);
+  $weekendNote.prop("hidden", !isWeekend);
+
+  renderFilters();
+  renderDayNav();
+  renderCards();
+  loadAll(false);
+});
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)

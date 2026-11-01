@@ -7,11 +7,20 @@
   <meta name="description" content="Popis projektu Obedové menu: zdroje dát, spracovanie a použité technológie.">
   <title>O projekte | Obedové menu</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<<<<<<< HEAD
+=======
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="css/fonts.css">
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header class="site-header">
+<<<<<<< HEAD
     <div class="wrap header-inner">
+=======
+    <div class="container header-inner">
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
       <div class="brand">
         <h1>Obedové menu</h1>
         <p>Čo sa dnes varí v okolí FEI STU, Ilkovičova 3</p>
@@ -25,6 +34,7 @@
     </div>
   </header>
 
+<<<<<<< HEAD
   <main class="wrap prose">
     <h2 class="section-title">O projekte</h2>
 
@@ -33,12 +43,100 @@
       <p>
         Nepoužil som žiadne externé knižnice ani frameworky, len štandardné webové API: Fetch API,
         <code>DOMParser</code> a <code>localStorage</code>. Vzhľad je napísaný vlastným CSS (Flexbox a Grid).
+=======
+  <main class="container prose">
+    <h2 class="section-title">O projekte</h2>
+
+    <p>
+      Stránka zobrazuje denné menu troch reštaurácií v okolí FEI STU. Beží celá na strane klienta
+      (HTML, CSS a JavaScript), bez vlastného servera.
+    </p>
+
+    <nav aria-label="Obsah stránky O projekte">
+      <ul class="toc">
+        <li><a href="#zdroje">Zdroje údajov</a></li>
+        <li><a href="#spracovanie">Spracovanie údajov</a></li>
+        <li><a href="#ukladanie">Ukladanie a chyby</a></li>
+        <li><a href="#kniznice">Použité knižnice a font</a></li>
+        <li><a href="#ai">Použitie AI nástrojov</a></li>
+      </ul>
+    </nav>
+
+    <section id="zdroje" aria-labelledby="zdroje-h">
+      <h3 id="zdroje-h">Zdroje údajov</h3>
+      <p>Údaje sa načítavajú z lokálnych kópií stránok reštaurácií uložených v priečinku <code>source/</code>:</p>
+      <ul>
+        <li>
+          <a href="https://www.restauracia-drag.sk/denne-menu" target="_blank" rel="noopener">Reštaurácia Drag</a>
+          (Staré Grunty 64): týždenné menu v záložkách podľa dní, polievky a hlavné jedlá v tabuľkách.
+        </li>
+        <li>
+          <a href="https://nasehospoda-karloveska.sk/#menu" target="_blank" rel="noopener">Naše Hospoda Karloveská</a>
+          (Segnerova 3): každý deň je samostatný blok <code>article</code> s dátumom, alergénmi a cenou.
+        </li>
+        <li>
+          <a href="https://www.jednabasen.sk/restauracja/jedna-basen-karlova-ves" target="_blank" rel="noopener">Jedna Báseň</a>
+          (Pribišova 3173/6): objednávkový systém, kde je každý deň samostatná sekcia; polievky sú v popise
+          sekcie a hlavné jedlá v zozname s cenou na tlačidle.
+        </li>
+      </ul>
+      <p>Každá reštaurácia má v nadpise karty odkaz na svoju pôvodnú stránku.</p>
+    </section>
+
+    <section id="spracovanie" aria-labelledby="spracovanie-h">
+      <h3 id="spracovanie-h">Spracovanie údajov</h3>
+      <p>
+        Kópia stránky sa načíta asynchrónne cez jQuery AJAX (<code>$.ajax</code>) ako text a spracuje sa pomocou
+        <code>DOMParser</code>. Potrebné údaje sa hľadajú v DOM strome cez <code>querySelector</code> a
+        <code>querySelectorAll</code>. Cudzí HTML sa do stránky nevkladá, zobrazujú sa iba vybrané údaje.
+      </p>
+      <p>
+        Pre každú reštauráciu existuje samostatná funkcia (<code>parseDrag</code>, <code>parseHospoda</code>,
+        <code>parseJednaBasen</code>) v súbore <code>js/parsers.js</code>. Všetky vracajú rovnakú štruktúru:
+        pole dní a v každom dni pole položiek s typom (polievka alebo hlavné jedlo), názvom, množstvom,
+        alergénmi a cenou. Novú reštauráciu stačí pridať ako ďalšiu funkciu a záznam v poli <code>SOURCES</code>.
+      </p>
+    </section>
+
+    <section id="ukladanie" aria-labelledby="ukladanie-h">
+      <h3 id="ukladanie-h">Ukladanie a chyby</h3>
+      <p>
+        Spracované menu sa ukladá do <code>localStorage</code>. Ak sú uložené údaje z aktuálneho dňa, stránky sa
+        znova nenačítavajú. Tlačidlo „Aktualizovať menu“ spustí nové načítanie, tlačidlo „Vymazať uložené dáta“
+        údaje odstráni. Pri každej reštaurácii je uvedený čas poslednej aktualizácie.
+      </p>
+      <p>
+        Keď je stránka nedostupná, zmení sa jej štruktúra alebo menu na daný deň chýba, zobrazí sa zrozumiteľná
+        správa. Chyba jednej reštaurácie neovplyvní ostatné.
+      </p>
+    </section>
+
+    <section id="kniznice" aria-labelledby="kniznice-h">
+      <h3 id="kniznice-h">Použité knižnice a font</h3>
+      <ul>
+        <li><a href="https://getbootstrap.com/" target="_blank" rel="noopener">Bootstrap 5.3.3</a> (CSS, licencia MIT): mriežka, karty, tlačidlá, záložky dní, prepínače a hlásenia.</li>
+        <li><a href="https://jquery.com/" target="_blank" rel="noopener">jQuery 3.7.1</a> (licencia MIT): AJAX načítanie, práca s DOM a udalosťami.</li>
+        <li><a href="https://fonts.google.com/specimen/Poppins" target="_blank" rel="noopener">Poppins</a> (licencia SIL OFL 1.1): písmo uložené lokálne vo formáte <code>.woff2</code>.</li>
+      </ul>
+      <p>Ostatné štýly a celá logika sú napísané vlastným CSS a JavaScriptom bez frameworkov.</p>
+    </section>
+
+    <section id="ai" aria-labelledby="ai-h">
+      <h3 id="ai-h">Použitie AI nástrojov</h3>
+      <p>
+        Na vypracovanie bol použitý AI asistent Claude (Anthropic). Podrobnosti sú v súbore
+        <code>README.md</code>.
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
       </p>
     </section>
   </main>
 
   <footer class="site-footer">
+<<<<<<< HEAD
     <div class="wrap">
+=======
+    <div class="container">
+>>>>>>> 2ea2af6 (Pridanie Zadanie 2)
       <p>Autor: Samuel Piteľ · Predmet WEBTE1 · FEI STU v Bratislave</p>
     </div>
   </footer>
