@@ -25,9 +25,13 @@ function dayIndex(name) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* Veľké písmená zmení na vetu: "KURACIE PRSIA" → "Kuracie prsia". */
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+/* Veľké písmená zmení na vetu: "KURACIE PRSIA" → "Kuracie prsia". */
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 function sentenceCase(value) {
   const letters = value.replace(/[^\p{L}]/gu, "");
   const upper = letters.replace(/[^\p{Lu}]/gu, "");
@@ -114,10 +118,14 @@ function parseHospoda(doc) {
     const dayEl = article.querySelector("div.text-xs.font-bold.uppercase");
     const index = dayEl ? dayIndex(textOf(dayEl)) : -1;
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (index === -1) return;
 =======
     if (index === -1) return; // napr. blok „Špeciál“ nie je deň v týždni
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+    if (index === -1) return; // napr. blok „Špeciál“ nie je deň v týždni
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
     const items = [];
     article.querySelectorAll(".divide-y > div").forEach((row) => {
@@ -151,9 +159,13 @@ function parseHospoda(doc) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* Alergény v tvare "/A:1,3,7/" (aj chybné varianty "/A1,3/", "/A: /") na konci textu. */
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+/* Alergény v tvare "/A:1,3,7/" (aj chybné varianty "/A1,3/", "/A: /") na konci textu. */
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 function extractAllergens(value) {
   const match = value.match(/\s*\/\s*A\s*:?\s*([\d,\s]*)\/?\s*$/i);
   if (!match) return { text: value, allergens: "" };
@@ -164,9 +176,13 @@ function extractAllergens(value) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 /* Cena z tlačidla: "od €8,20", "€10,90" alebo "od €8". */
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+/* Cena z tlačidla: "od €8,20", "€10,90" alebo "od €8". */
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 function parseEuroPrice(value) {
   const match = (value || "").match(/€\s*(\d+(?:[.,]\d+)?)/);
   return match ? parseFloat(match[1].replace(",", ".")) : null;
@@ -184,9 +200,13 @@ function parseJednaBasen(doc) {
     const items = [];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     // polievky sú v popise skupiny, oddelené značkami <br>
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+    // polievky sú v popise skupiny, oddelené značkami <br>
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     const description = section.querySelector(".m-list__description");
     if (description) {
       const walker = document.createTreeWalker(description, NodeFilter.SHOW_TEXT);
@@ -206,9 +226,13 @@ function parseJednaBasen(doc) {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     // hlavné jedlá sú v zozname položiek
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+    // hlavné jedlá sú v zozname položiek
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     section.querySelectorAll("li.m-list__item").forEach((li) => {
       const titleEl = li.querySelector(".m-item__title");
       if (!titleEl) return;
@@ -217,9 +241,13 @@ function parseJednaBasen(doc) {
       const { amount, title } = splitAmount(fromTitle.text);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       // druhý riadok ("140/200g /A:1,3,7/") dopĺňa gramáž mäsa a prílohy
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+      // druhý riadok ("140/200g /A:1,3,7/") dopĺňa gramáž mäsa a prílohy
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
       const extra = extractAllergens(textOf(li.querySelector(".m-item__description")));
       const fullAmount = extra.text.match(/^\d+(?:\/\d+)*\s*g(?:\s*\/\s*\d+\s*g)?$/i);
 

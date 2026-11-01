@@ -15,7 +15,10 @@
   --danger-bg: #fdecec;
   --radius: 12px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
   /* Bootstrap: farby podľa témy stránky */
   --bs-primary: #0b4f8a;
@@ -23,7 +26,10 @@
   --bs-link-color: #0b4f8a;
   --bs-link-color-rgb: 11, 79, 138;
   --bs-body-font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+<<<<<<< HEAD
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 * {
@@ -40,10 +46,14 @@ body {
   display: flex;
   flex-direction: column;
 <<<<<<< HEAD
+<<<<<<< HEAD
   font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
 =======
   font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   line-height: 1.5;
   color: var(--ink);
   background: var(--paper);
@@ -54,6 +64,7 @@ main {
   padding-block: 1.5rem 2.5rem;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 .wrap {
   width: min(100% - 2rem, 76rem);
@@ -71,6 +82,8 @@ main {
 
 =======
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 :focus-visible {
   outline: 3px solid #f5b83d;
   outline-offset: 2px;
@@ -139,6 +152,7 @@ main {
 
 .day-tabs {
 <<<<<<< HEAD
+<<<<<<< HEAD
   list-style: none;
   margin: 0;
   padding: 0 0 .25rem;
@@ -164,6 +178,8 @@ main {
 
 .day-tabs button[aria-current="true"] {
 =======
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: .5rem;
@@ -183,7 +199,10 @@ main {
 }
 
 .day-tabs .nav-link.active {
+<<<<<<< HEAD
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   background: var(--blue);
   border-color: var(--blue);
   color: #fff;
@@ -197,6 +216,7 @@ main {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .notice {
   margin: .75rem 0 0;
   padding: .6rem .9rem;
@@ -207,6 +227,8 @@ main {
 
 =======
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .toolbar-row {
   display: flex;
   flex-wrap: wrap;
@@ -237,6 +259,7 @@ main {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .filter-list label {
   display: inline-flex;
   align-items: center;
@@ -248,17 +271,25 @@ main {
   margin: 0;
   padding: .35rem .8rem .35rem 2.9rem;
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+.filter-list .form-check {
+  margin: 0;
+  padding: .35rem .8rem .35rem 2.9rem;
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   border: 1px solid var(--line);
   border-radius: 999px;
   background: #f6f8fb;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .filter-list input {
   accent-color: var(--blue);
   width: 1rem;
   height: 1rem;
 =======
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .filter-list .form-check-input {
   cursor: pointer;
 }
@@ -270,7 +301,10 @@ main {
 .filter-list .form-check-input:checked {
   background-color: var(--blue);
   border-color: var(--blue);
+<<<<<<< HEAD
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .actions {
@@ -280,6 +314,7 @@ main {
 }
 
 .btn {
+<<<<<<< HEAD
 <<<<<<< HEAD
   font: inherit;
   cursor: pointer;
@@ -311,6 +346,8 @@ main {
   opacity: .6;
   cursor: progress;
 =======
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   font-weight: 600;
   border-radius: 10px;
   padding: .6rem 1.1rem;
@@ -341,7 +378,10 @@ main {
   --bs-btn-disabled-color: var(--blue);
   --bs-btn-disabled-border-color: var(--blue);
   background: #fff;
+<<<<<<< HEAD
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .status {
@@ -356,6 +396,7 @@ main {
   font-size: 1.4rem;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 .cards {
   display: grid;
@@ -372,21 +413,31 @@ main {
   display: flex;
   flex-direction: column;
 =======
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .card {
   --bs-card-border-color: var(--line);
   --bs-card-border-radius: var(--radius);
   --bs-card-inner-border-radius: var(--radius);
   overflow: hidden;
+<<<<<<< HEAD
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   box-shadow: 0 1px 3px rgba(12, 40, 70, .08);
 }
 
 .card-header {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   background: var(--card);
   border-radius: 0;
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+  background: var(--card);
+  border-radius: 0;
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   padding: 1rem 1.1rem .8rem;
   border-bottom: 3px solid var(--blue);
 }
@@ -419,9 +470,12 @@ main {
 .card-body {
   padding: 1rem 1.1rem;
 <<<<<<< HEAD
+<<<<<<< HEAD
   flex: 1;
 =======
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .card-footer {
@@ -461,12 +515,15 @@ main {
 .badge {
   font-size: .7rem;
 <<<<<<< HEAD
+<<<<<<< HEAD
   padding: .1rem .5rem;
   border-radius: 999px;
   background: var(--blue);
   color: #fff;
 =======
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   font-weight: 600;
 }
 
@@ -547,6 +604,7 @@ main {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .message-error {
   padding: .8rem 1rem;
   border-radius: 8px;
@@ -566,6 +624,8 @@ main {
   color: var(--price-ink);
   font-size: .9rem;
 =======
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .alert {
   margin: 0 0 .9rem;
   font-size: .9rem;
@@ -577,13 +637,17 @@ main {
 
 .alert p:last-child {
   margin-bottom: 0;
+<<<<<<< HEAD
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .message-info {
   color: var(--muted);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 .spinner {
   width: 1.1rem;
@@ -609,6 +673,8 @@ main {
 
 =======
 >>>>>>> 2ea2af6 (Pridanie Zadanie 2)
+=======
+>>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .site-footer {
   background: var(--blue-dark);
   color: #cfe0f1;
