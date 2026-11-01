@@ -27,72 +27,12 @@
 
   <main class="wrap prose">
     <h2 class="section-title">O projekte</h2>
-    <p>
-      Stránka zhromažďuje denné menu reštaurácií a zobrazuje ho podľa dní v týždni.
-      Celé riešenie beží výlučne v prehliadači (HTML, CSS a JavaScript), bez servera a bez databázy.
-    </p>
-
-    <nav aria-label="Obsah stránky">
-      <ul class="toc">
-        <li><a href="#zdroje">Zdroje dát</a></li>
-        <li><a href="#spracovanie">Spracovanie dát</a></li>
-        <li><a href="#ukladanie">Ukladanie a ohľaduplnosť k zdrojom</a></li>
-        <li><a href="#kniznice">Použité knižnice</a></li>
-        <li><a href="#pridanie">Pridanie ďalšej reštaurácie</a></li>
-        <li><a href="index.html">Späť na menu</a></li>
-      </ul>
-    </nav>
-
-    <section id="zdroje" aria-labelledby="zdroje-h">
-      <h3 id="zdroje-h">Zdroje dát</h3>
-      <ul>
-        <li><a href="https://www.restauracia-drag.sk/denne-menu" target="_blank" rel="noopener">Reštaurácia Drag</a>, Staré Grunty 64</li>
-        <li><a href="https://nasehospoda-karloveska.sk/#menu" target="_blank" rel="noopener">Naše Hospoda Karloveská</a>, Segnerova 3</li>
-      </ul>
-      <p>
-        Obe reštaurácie zverejňujú menu priamo ako text v HTML. Stránky sú uložené ako lokálne kópie
-        v priečinku projektu a stránka ich načítava asynchrónne cez Fetch API.
-      </p>
-    </section>
-
-    <section id="spracovanie" aria-labelledby="spracovanie-h">
-      <h3 id="spracovanie-h">Spracovanie dát</h3>
-      <p>
-        Stiahnutý HTML text sa premení na dokument cez <code>DOMParser</code>. Každá reštaurácia má vlastnú
-        funkciu (<code>parseDrag</code>, <code>parseHospoda</code>), ktorá z dokumentu vyberie dni, polievky,
-        hlavné jedlá, gramáže, alergény a ceny. Všetky funkcie vracajú rovnakú štruktúru, takže vykresľovanie
-        je pre všetky reštaurácie spoločné.
-      </p>
-      <p>
-        Ak je stránka nedostupná, zmení sa jej štruktúra alebo menu na vybraný deň chýba, zobrazí sa zrozumiteľná
-        správa. Chyba jednej reštaurácie nezablokuje ostatné.
-      </p>
-    </section>
-
-    <section id="ukladanie" aria-labelledby="ukladanie-h">
-      <h3 id="ukladanie-h">Ukladanie a ohľaduplnosť k zdrojom</h3>
-      <p>
-        Spracované menu sa ukladá do <code>localStorage</code>. Ak už existujú dáta z aktuálneho dňa, stránky
-        reštaurácií sa pri otvorení nenačítavajú znova. Nové načítanie spustí tlačidlo „Aktualizovať menu“,
-        uložené dáta odstráni tlačidlo „Vymazať uložené dáta“. Pri každej reštaurácii je uvedený čas poslednej
-        aktualizácie.
-      </p>
-    </section>
 
     <section id="kniznice" aria-labelledby="kniznice-h">
       <h3 id="kniznice-h">Použité knižnice</h3>
       <p>
         Nepoužil som žiadne externé knižnice ani frameworky, len štandardné webové API: Fetch API,
         <code>DOMParser</code> a <code>localStorage</code>. Vzhľad je napísaný vlastným CSS (Flexbox a Grid).
-      </p>
-    </section>
-
-    <section id="pridanie" aria-labelledby="pridanie-h">
-      <h3 id="pridanie-h">Pridanie ďalšej reštaurácie</h3>
-      <p>
-        V súbore <code>js/parsers.js</code> stačí napísať novú funkciu <code>parseNazov(doc)</code>, ktorá vráti
-        dáta v spoločnej štruktúre, a pridať objekt s názvom, adresou, odkazom a lokálnou kópiou do poľa
-        <code>SOURCES</code>.
       </p>
     </section>
   </main>
