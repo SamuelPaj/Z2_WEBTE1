@@ -1,6 +1,6 @@
 # Obedové menu v okolí FEI STU (WEBTE1, zadanie č. 2)
 
-Autor: Samuel Piteľ
+Autor: Samuel Piteľ./n
 Web na školskom serveri: https://webte1.fei.stuba.sk/~xpitels/Z2_Pite%c4%be/index.html
 
 ## Reštaurácie (zdroje)
