@@ -132,6 +132,20 @@ function parseHospoda(doc) {
   return days;
 }
 
+function parseDoncos(doc) {
+  const img = doc.querySelector('img[alt*="menu" i][src*="wixstatic"]');
+  if (!img) throw new Error("obrázok s menu sa nenašiel");
+
+  const item = {
+    type: "image",
+    src: img.getAttribute("src"),
+    title: cleanText(img.getAttribute("alt")) || "Denné menu",
+    amount: "",
+    allergens: "",
+    price: null
+  };
+  return DAY_NAMES.slice(0, 5).map((day) => ({ day, date: "", items: [item] }));
+}
 
 const SOURCES = [
   {
@@ -139,7 +153,7 @@ const SOURCES = [
     name: "Reštaurácia Drag",
     address: "Staré Grunty 64, Bratislava",
     website: "https://www.restauracia-drag.sk/denne-menu",
-    localUrl: "source/restauracia-drag.html",
+    localUrl: "source/Reštaurácia_DRAG_menu.html",
     parse: parseDrag
   },
   {
@@ -147,7 +161,15 @@ const SOURCES = [
     name: "Naše Hospoda Karloveská",
     address: "Segnerova 3, Bratislava – Karlova Ves",
     website: "https://nasehospoda-karloveska.sk/#menu",
-    localUrl: "source/nasa-hospoda.html",
+    localUrl: "source/Naše Hospoda Karloveská _ Bratislava - Karlova Ves.html",
     parse: parseHospoda
+  },
+  {
+    id: "doncos",
+    name: "Don Co's",
+    address: "Staré Grunty 23, Bratislava – Karlova Ves",
+    website: "https://www.doncos.sk/denné-menu",
+    localUrl: "source/Denné menu _ DoNčos.html",
+    parse: parseDoncos
   }
 ];
