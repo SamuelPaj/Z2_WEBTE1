@@ -67,15 +67,15 @@
       <p>Údaje sa načítavajú z lokálnych kópií stránok reštaurácií uložených v priečinku <code>source/</code>:</p>
       <ul>
         <li>
-          <a href="https://www.restauracia-drag.sk/denne-menu" target="_blank" rel="noopener">Reštaurácia Drag</a>
+          <a href="https://www.restauracia-drag.sk/restauracia-drag" target="_blank" rel="noopener">Reštaurácia Drag</a>
           (Staré Grunty 64): týždenné menu v záložkách podľa dní, polievky a hlavné jedlá v tabuľkách.
         </li>
         <li>
-          <a href="https://nasehospoda-karloveska.sk/#menu" target="_blank" rel="noopener">Naše Hospoda Karloveská</a>
+          <a href="https://nasehospoda-karloveska.sk/" target="_blank" rel="noopener">Naše Hospoda Karloveská</a>
           (Segnerova 3): každý deň je samostatný blok <code>article</code> s dátumom, alergénmi a cenou.
         </li>
         <li>
-          <a href="https://www.jednabasen.sk/restauracja/jedna-basen-karlova-ves" target="_blank" rel="noopener">Jedna Báseň</a>
+          <a href="https://www.jednabasen.sk/" target="_blank" rel="noopener">Jedna Báseň</a>
           (Pribišova 3173/6): objednávkový systém, kde je každý deň samostatná sekcia; polievky sú v popise
           sekcie a hlavné jedlá v zozname s cenou na tlačidle.
         </li>
@@ -95,6 +95,10 @@
         <code>parseJednaBasen</code>) v súbore <code>js/parsers.js</code>. Všetky vracajú rovnakú štruktúru:
         pole dní a v každom dni pole položiek s typom (polievka alebo hlavné jedlo), názvom, množstvom,
         alergénmi a cenou. Novú reštauráciu stačí pridať ako ďalšiu funkciu a záznam v poli <code>SOURCES</code>.
+      </p>
+      <p>
+        Dátumy dní preberáme zo stránok Hospody a Jednej Básne. Stránka Drag dátumy neuvádza, preto sa dopočítajú
+        z týždňa načítania (pondelok až piatok, cez víkend nasledujúceho týždňa).
       </p>
     </section>
 
