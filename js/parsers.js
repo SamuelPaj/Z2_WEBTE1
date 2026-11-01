@@ -54,6 +54,17 @@ function buildItem(type, rawText, price) {
   return { type, title: sentenceCase(title), amount, allergens, price };
 }
 
+/* Stránka Drag dátumy neuvádza, preto sa dopočítajú z týždňa načítania:
+   pondelok až piatok aktuálneho týždňa, cez víkend nasledujúceho týždňa. */
+function weekDate(dayOffset, now = new Date()) {
+  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const sinceMonday = (date.getDay() + 6) % 7; // pondelok = 0, nedeľa = 6
+  date.setDate(date.getDate() - sinceMonday + (sinceMonday > 4 ? 7 : 0) + dayOffset);
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  return `${dd}.${mm}.${date.getFullYear()}`;
+}
+
 function parseDrag(doc) {
   const panes = { pondelok: "Pondelok", utorok: "Utorok", streda: "Streda", stvrtok: "Štvrtok", piatok: "Piatok" };
   const days = [];
@@ -88,7 +99,7 @@ function parseDrag(doc) {
       }
     });
 
-    days.push({ day, date: "", items });
+    days.push({ day, date: weekDate(DAY_NAMES.indexOf(day)), items });
   }
   return days;
 }
@@ -212,7 +223,7 @@ const SOURCES = [
     id: "drag",
     name: "Reštaurácia Drag",
     address: "Staré Grunty 64, Bratislava",
-    website: "https://www.restauracia-drag.sk/denne-menu",
+    website: "https://www.restauracia-drag.sk/restauracia-drag",
     localUrl: "source/Reštaurácia_DRAG_menu.html",
     parse: parseDrag
   },
@@ -220,7 +231,7 @@ const SOURCES = [
     id: "hospoda",
     name: "Naše Hospoda Karloveská",
     address: "Segnerova 3, Bratislava – Karlova Ves",
-    website: "https://nasehospoda-karloveska.sk/#menu",
+    website: "https://nasehospoda-karloveska.sk/",
     localUrl: "source/Naše Hospoda Karloveská _ Bratislava - Karlova Ves.html",
     parse: parseHospoda
   },
@@ -228,7 +239,7 @@ const SOURCES = [
     id: "jedna-basen",
     name: "Jedna Báseň",
     address: "Pribišova 3173/6, Bratislava – Karlova Ves",
-    website: "https://www.jednabasen.sk/restauracja/jedna-basen-karlova-ves",
+    website: "https://www.jednabasen.sk/",
     localUrl: "source/Jedna_basen_menu.html",
     parse: parseJednaBasen
   }
