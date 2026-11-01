@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Samuel Piteľ">
+  <meta name="description" content="Denné menu reštaurácií v okolí FEI STU v Bratislave, prehľadne podľa dní v týždni.">
+  <title>Obedové menu</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/vendor/jquery.min.js" defer></script>
+  <script src="js/parsers.js" defer></script>
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Obedové menu</h1>
+        <p>Čo sa dnes varí v okolí FEI STU, Ilkovičova 3</p>
+      </div>
+      <nav aria-label="Hlavná navigácia">
+        <ul class="main-nav">
+          <li><a href="index.html" aria-current="page">Menu</a></li>
+          <li><a href="o-projekte.html">O projekte</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="toolbar" aria-labelledby="toolbar-title">
+      <h2 id="toolbar-title" class="visually-hidden">Výber dňa a nastavenia</h2>
+
+      <nav aria-label="Dni v týždni">
+        <ul id="day-nav" class="nav nav-pills day-tabs"></ul>
+      </nav>
+
+      <p id="weekend-note" class="alert alert-warning mt-3 mb-0" role="note" hidden>
+        Cez víkend nie je denné menu k dispozícii, preto zobrazujeme menu na pondelok.
+      </p>
+
+      <div class="toolbar-row">
+        <fieldset class="filters">
+          <legend>Zobraziť reštaurácie</legend>
+          <div id="filters" class="filter-list"></div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" id="refresh" class="btn btn-primary">Aktualizovať menu</button>
+          <button type="button" id="clear" class="btn btn-outline-primary">Vymazať uložené dáta</button>
+        </div>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section aria-labelledby="menu-title">
+      <h2 id="menu-title" class="section-title">Menu: <span id="selected-day-label"></span></h2>
+      <div id="cards" class="row g-4 align-items-start" aria-busy="true"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Autor: Samuel Piteľ · Predmet WEBTE1 · FEI STU v Bratislave</p>
+      <p>Dnes je <time id="today-time"></time>.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
