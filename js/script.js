@@ -57,7 +57,6 @@ function clearStored() {
     try {
       localStorage.removeItem(STORAGE_PREFIX + source.id);
     } catch {
-      /* ignorujeme */
     }
   }
 }
@@ -65,7 +64,6 @@ function clearStored() {
 async function loadSource(source) {
   let html;
   try {
-    // jQuery AJAX: lokálna kópia stránky sa načíta asynchrónne ako text
     html = await $.ajax({ url: source.localUrl, method: "GET", dataType: "text", cache: false });
   } catch (jqXHR) {
     if (jqXHR && jqXHR.status) {
