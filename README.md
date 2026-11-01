@@ -1,7 +1,7 @@
 # Obedové menu v okolí FEI STU (WEBTE1, zadanie č. 2)
 
 Autor: Samuel Piteľ
-
+https://webte1.fei.stuba.sk/~xpitels/Z2_Pite%c4%be/index.html
 
 ## Použité knižnice
 
@@ -10,7 +10,7 @@ Autor: Samuel Piteľ
 | Bootstrap (CSS) | 5.3.3 | mriežka, karty, tlačidlá, záložky, prepínače, hlásenia | MIT |
 | jQuery | 3.7.1 | AJAX, práca s DOM a udalosťami | MIT |
 
-Knižnice sú uložené lokálne v `css/vendor/` a `js/vendor/`. Nepoužité sú žiadne
+Knižnice sú uložené lokálne v `css/vendor/` a `js/vendor/`. Nie sú použité žiadne
 JavaScriptové frameworky.
 
 ## Font a licencia
