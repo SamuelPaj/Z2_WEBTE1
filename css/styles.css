@@ -14,11 +14,6 @@
   --danger: #a32626;
   --danger-bg: #fdecec;
   --radius: 12px;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
   /* Bootstrap: farby podľa témy stránky */
   --bs-primary: #0b4f8a;
@@ -26,10 +21,6 @@
   --bs-link-color: #0b4f8a;
   --bs-link-color-rgb: 11, 79, 138;
   --bs-body-font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 * {
@@ -45,15 +36,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
-=======
   font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   line-height: 1.5;
   color: var(--ink);
   background: var(--paper);
@@ -64,26 +47,6 @@ main {
   padding-block: 1.5rem 2.5rem;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.wrap {
-  width: min(100% - 2rem, 76rem);
-  margin-inline: auto;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-=======
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 :focus-visible {
   outline: 3px solid #f5b83d;
   outline-offset: 2px;
@@ -151,35 +114,6 @@ main {
 }
 
 .day-tabs {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  list-style: none;
-  margin: 0;
-  padding: 0 0 .25rem;
-  display: flex;
-  gap: .5rem;
-  overflow-x: auto;
-}
-
-.day-tabs button {
-  font: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-  padding: .6rem 1.1rem;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: #f6f8fb;
-  color: var(--ink);
-}
-
-.day-tabs button:hover {
-  border-color: var(--blue);
-}
-
-.day-tabs button[aria-current="true"] {
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: .5rem;
@@ -199,10 +133,6 @@ main {
 }
 
 .day-tabs .nav-link.active {
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   background: var(--blue);
   border-color: var(--blue);
   color: #fff;
@@ -215,20 +145,6 @@ main {
   margin-left: .35rem;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.notice {
-  margin: .75rem 0 0;
-  padding: .6rem .9rem;
-  border-radius: 8px;
-  background: var(--price-bg);
-  color: var(--price-ink);
-}
-
-=======
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .toolbar-row {
   display: flex;
   flex-wrap: wrap;
@@ -258,38 +174,14 @@ main {
   gap: .5rem;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.filter-list label {
-  display: inline-flex;
-  align-items: center;
-  gap: .45rem;
-  cursor: pointer;
-  padding: .35rem .8rem;
-=======
 .filter-list .form-check {
   margin: 0;
   padding: .35rem .8rem .35rem 2.9rem;
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-.filter-list .form-check {
-  margin: 0;
-  padding: .35rem .8rem .35rem 2.9rem;
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   border: 1px solid var(--line);
   border-radius: 999px;
   background: #f6f8fb;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.filter-list input {
-  accent-color: var(--blue);
-  width: 1rem;
-  height: 1rem;
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .filter-list .form-check-input {
   cursor: pointer;
 }
@@ -301,10 +193,6 @@ main {
 .filter-list .form-check-input:checked {
   background-color: var(--blue);
   border-color: var(--blue);
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .actions {
@@ -314,40 +202,6 @@ main {
 }
 
 .btn {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  font: inherit;
-  cursor: pointer;
-  padding: .6rem 1.1rem;
-  border-radius: 10px;
-  border: 1px solid var(--blue);
-  font-weight: 600;
-}
-
-.btn-primary {
-  background: var(--blue);
-  color: #fff;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: var(--blue-dark);
-}
-
-.btn-ghost {
-  background: #fff;
-  color: var(--blue);
-}
-
-.btn-ghost:hover:not(:disabled) {
-  background: #eaf2fa;
-}
-
-.btn:disabled {
-  opacity: .6;
-  cursor: progress;
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   font-weight: 600;
   border-radius: 10px;
   padding: .6rem 1.1rem;
@@ -378,10 +232,6 @@ main {
   --bs-btn-disabled-color: var(--blue);
   --bs-btn-disabled-border-color: var(--blue);
   background: #fff;
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .status {
@@ -396,48 +246,17 @@ main {
   font-size: 1.4rem;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.cards {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-  align-items: start;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .card {
   --bs-card-border-color: var(--line);
   --bs-card-border-radius: var(--radius);
   --bs-card-inner-border-radius: var(--radius);
   overflow: hidden;
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   box-shadow: 0 1px 3px rgba(12, 40, 70, .08);
 }
 
 .card-header {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
   background: var(--card);
   border-radius: 0;
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-  background: var(--card);
-  border-radius: 0;
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   padding: 1rem 1.1rem .8rem;
   border-bottom: 3px solid var(--blue);
 }
@@ -469,13 +288,6 @@ main {
 
 .card-body {
   padding: 1rem 1.1rem;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  flex: 1;
-=======
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .card-footer {
@@ -514,16 +326,6 @@ main {
 
 .badge {
   font-size: .7rem;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  padding: .1rem .5rem;
-  border-radius: 999px;
-  background: var(--blue);
-  color: #fff;
-=======
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   font-weight: 600;
 }
 
@@ -603,29 +405,6 @@ main {
   color: var(--muted);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.message-error {
-  padding: .8rem 1rem;
-  border-radius: 8px;
-  background: var(--danger-bg);
-  color: var(--danger);
-}
-
-.message-error p {
-  margin: 0 0 .6rem;
-}
-
-.message-warn {
-  margin: 0 0 .9rem;
-  padding: .55rem .8rem;
-  border-radius: 8px;
-  background: var(--price-bg);
-  color: var(--price-ink);
-  font-size: .9rem;
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .alert {
   margin: 0 0 .9rem;
   font-size: .9rem;
@@ -637,44 +416,12 @@ main {
 
 .alert p:last-child {
   margin-bottom: 0;
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 .message-info {
   color: var(--muted);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-.spinner {
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 50%;
-  display: inline-block;
-  border: 3px solid var(--line);
-  border-top-color: var(--blue);
-  animation: spin .8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .spinner {
-    animation-duration: 3s;
-  }
-}
-
-=======
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 .site-footer {
   background: var(--blue-dark);
   color: #cfe0f1;
