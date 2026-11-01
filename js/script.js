@@ -1,357 +1,346 @@
 "use strict";
-/* Obedové menu v okolí fakulty – WEBTE1, Samuel Piteľ */
+/* Obedové menu v okolí fakulty – WEBTE1, Samuel Piteľ
+   Zoznam reštaurácií a parsery sú v restaurants.js (SOURCES, DAY_NAMES). */
 
-const DAY_NAMES = ["Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota", "Nedeľa"];
 const WORK_DAYS = DAY_NAMES.slice(0, 5);
 const ALL_WEEK = "all";
+const STORAGE_PREFIX = "obedove-menu:";
 
-const DELAYS = { drag: 0, hospoda: 0 };
-
-/* ---------- Pomocné funkcie pre parsovanie ---------- */
-
-function cleanText(text) {
-  return text.replace(/\s+/g, " ").trim();
-}
-
-function parsePrice(text) {
-  const match = (text || "").replace(/\s/g, "").match(/(\d+)[,.](\d{2})/);
-  return match ? parseFloat(`${match[1]}.${match[2]}`) : null;
-}
-
-function dayIndexByName(text) {
-  const t = text.trim().toLowerCase();
-  return DAY_NAMES.findIndex((n) => n.toLowerCase() === t);
-}
-
-/* Všeobecný parser: prejde textové uzly stránky, nadpis dňa začne nový deň,
-   ostatné riadky sa pridajú ako jedlá. Vhodné pre Wix stránky (Don Co's). */
-function parseByDayHeadings(doc) {
-  const days = [];
-  let current = null;
-  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-  const skip = new Set(["SCRIPT", "STYLE", "NOSCRIPT"]);
-
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    if (skip.has(node.parentElement?.tagName)) continue;
-    const text = cleanText(node.textContent);
-    if (!text) continue;
-
-    const idx = dayIndexByName(text);
-    if (idx !== -1) {
-      current = { day: DAY_NAMES[idx], date: "", screenings: [] };
-      days.push(current);
-      continue;
-    }
-    if (!current || text.length < 4) continue;
-
-    const price = parsePrice(text);
-    const title = cleanText(text.replace(/\d+[,.]\d{2}\s*(€|EUR)?/i, ""));
-    if (title.length >= 4) {
-      current.screenings.push({ title, price });
-    } else if (price !== null && current.screenings.length) {
-      const last = current.screenings[current.screenings.length - 1];
-      if (last.price === null) last.price = price;
-    }
-  }
-  return days;
-}
-
-/* ---------- Zdroje ---------- */
-
-const SOURCES = [
-  {
-    id: "drag",
-    name: "Reštaurácia Drag",
-    website: "https://www.restauracia-drag.sk/denne-menu",
-    localUrl: "Reštaurácia_DRAG_menu.html",
-    parse(doc) {
-      const ids = { pondelok: "Pondelok", utorok: "Utorok", streda: "Streda", stvrtok: "Štvrtok", piatok: "Piatok" };
-      const days = [];
-      for (const [id, day] of Object.entries(ids)) {
-        const pane = doc.getElementById(id);
-        if (!pane) continue;
-        const screenings = [];
-        pane.querySelectorAll("table tr").forEach((row) => {
-          const textEl = row.querySelector("td p, td h4, td");
-          const priceEl = row.querySelector(".text-right");
-          const title = textEl ? cleanText(textEl.textContent) : "";
-          if (title) {
-            screenings.push({ title, price: priceEl ? parsePrice(priceEl.textContent) : null });
-          }
-        });
-        days.push({ day, date: "", screenings });
-      }
-      return days;
-    }
-  },
-  /* Don Co's sa nepoužil: ich denné menu je na webe iba obrázok (PNG), nie HTML text.
-     Tu pribudne tretia reštaurácia, ktorá zverejňuje menu priamo v HTML. */
-  {
-    id: "hospoda",
-    name: "Naše Hospoda Karloveská",
-    website: "https://nasehospoda-karloveska.sk/#menu",
-    localUrl: "Naše_Hospoda_Karloveská___menu.html",
-    parse(doc) {
-      const days = [];
-      doc.querySelectorAll("section#menu article").forEach((article) => {
-        const dayTitleEl = article.querySelector("div.text-xs.font-bold.uppercase");
-        const dateEl = article.querySelector("div.mt-1.font-bold.text-white");
-        if (!dayTitleEl) return;
-
-        const raw = cleanText(dayTitleEl.textContent);
-        const day = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
-        const screenings = [];
-
-        article.querySelectorAll(".divide-y > div").forEach((item) => {
-          const titleEl = item.querySelector(".font-bold.text-hospoda-cream");
-          const priceEl = item.querySelector(".shrink-0.font-bold.text-hospoda-cream");
-          if (titleEl) {
-            screenings.push({
-              title: cleanText(titleEl.textContent),
-              price: priceEl ? parsePrice(priceEl.textContent) : null
-            });
-          }
-        });
-        days.push({ day, date: dateEl ? cleanText(dateEl.textContent) : "", screenings });
-      });
-      return days;
-    }
-  }
-];
-
-/* ---------- Stav a prvky ---------- */
+/* ---------- Prvky stránky ---------- */
 
 const statusText = document.getElementById("status");
 const refreshButton = document.getElementById("refresh");
+const clearButton = document.getElementById("clear");
 const cards = document.getElementById("cards");
 const filters = document.getElementById("filters");
 const dayNav = document.getElementById("day-nav");
 const dayLabel = document.getElementById("selected-day-label");
+const weekendNote = document.getElementById("weekend-note");
 
+/* ---------- Stav ---------- */
+
+const now = new Date();
+const todayIndex = (now.getDay() + 6) % 7;
+const todayName = DAY_NAMES[todayIndex];
+const isWeekend = todayIndex > 4;
+
+let selectedDay = isWeekend ? WORK_DAYS[0] : todayName;
 const results = {};
 const hiddenSources = new Set();
 
-const todayIndex = (new Date().getDay() + 6) % 7;
-const todayName = DAY_NAMES[todayIndex];
-let selectedDay = todayIndex < 5 ? todayName : WORK_DAYS[0];
+function todayKey() {
+  return new Date().toLocaleDateString("sv-SE"); // RRRR-MM-DD v lokálnom čase
+}
 
-const todayTime = document.getElementById("today-time");
-todayTime.dateTime = new Date().toISOString().slice(0, 10);
-todayTime.textContent = `${todayName} ${new Date().toLocaleDateString("sk-SK")}`;
+/* ---------- localStorage ---------- */
 
-/* ---------- Načítanie ---------- */
+function readStored(source) {
+  try {
+    const raw = localStorage.getItem(STORAGE_PREFIX + source.id);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data || !Array.isArray(data.days) || !data.updatedAt) return null;
+    const updatedAt = new Date(data.updatedAt);
+    if (Number.isNaN(updatedAt.getTime())) return null;
+    return { days: data.days, updatedAt, dayKey: data.dayKey };
+  } catch {
+    return null; // poškodené dáta alebo zakázané úložisko
+  }
+}
 
-refreshButton.addEventListener("click", loadAll);
+function writeStored(source, days, updatedAt) {
+  try {
+    localStorage.setItem(
+      STORAGE_PREFIX + source.id,
+      JSON.stringify({ days, updatedAt: updatedAt.toISOString(), dayKey: todayKey() })
+    );
+  } catch {
+    /* plné alebo nedostupné úložisko – stránka funguje aj bez ukladania */
+  }
+}
 
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+function clearStored() {
+  for (const source of SOURCES) {
+    try {
+      localStorage.removeItem(STORAGE_PREFIX + source.id);
+    } catch {
+      /* ignorujeme */
+    }
+  }
+}
+
+/* ---------- Načítanie a spracovanie ---------- */
 
 async function loadSource(source) {
-  await wait(DELAYS[source.id] ?? 0);
-  const response = await fetch(source.localUrl);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  let response;
+  try {
+    response = await fetch(source.localUrl);
+  } catch {
+    throw new Error("Stránka reštaurácie je momentálne nedostupná.");
+  }
+  if (!response.ok) {
+    throw new Error(`Stránka reštaurácie je nedostupná (chyba ${response.status}).`);
+  }
+
   const doc = new DOMParser().parseFromString(await response.text(), "text/html");
-  const days = source.parse(doc);
-  if (!days.some((d) => d.screenings.length)) {
-    throw new Error("v stránke sa nenašlo žiadne menu");
+
+  let days;
+  try {
+    days = source.parse(doc);
+  } catch {
+    throw new Error("Štruktúra stránky sa zmenila, menu sa nepodarilo spracovať.");
+  }
+  if (!Array.isArray(days) || !days.some((day) => day.items && day.items.length)) {
+    throw new Error("Na stránke sa nenašlo žiadne menu. Možno sa zmenila jej štruktúra.");
   }
   return days;
 }
 
-/* ---------- Vykresľovanie ---------- */
-
-function formatPrice(price) {
-  return price === null ? "" : `${price.toFixed(2).replace(".", ",")} €`;
-}
-
-function createDayBlock(entry, dayName) {
-  const block = document.createElement("section");
-  block.className = "day-block";
-  if (dayName === todayName) block.classList.add("is-today");
-
-  const heading = document.createElement("h3");
-  heading.textContent = dayName;
-  if (entry?.date) {
-    heading.append(" ");
-    const time = document.createElement("time");
-    const m = entry.date.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})?/);
-    if (m) {
-      const year = m[3] || new Date().getFullYear();
-      time.dateTime = `${year}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
-    }
-    time.textContent = entry.date;
-    heading.append(time);
-  }
-  block.append(heading);
-
-  if (!entry || entry.screenings.length === 0) {
-    const empty = document.createElement("p");
-    empty.className = "mb-0 text-body-secondary";
-    empty.textContent = "Menu na tento deň nie je k dispozícii.";
-    block.append(empty);
-    return block;
-  }
-
-  const list = document.createElement("ul");
-  list.className = "list-unstyled mb-0 menu-list";
-  for (const item of entry.screenings) {
-    const li = document.createElement("li");
-    const name = document.createElement("span");
-    name.textContent = item.title;
-    li.append(name);
-    if (item.price !== null) {
-      const price = document.createElement("span");
-      price.className = "menu-price";
-      price.textContent = formatPrice(item.price);
-      li.append(price);
-    }
-    list.append(li);
-  }
-  block.append(list);
-  return block;
-}
-
-function createMenuContent(days) {
-  const names = selectedDay === ALL_WEEK ? WORK_DAYS : [selectedDay];
-  const fragment = document.createDocumentFragment();
-  for (const name of names) {
-    const entry = days.find((d) => d.day.toLowerCase() === name.toLowerCase());
-    fragment.append(createDayBlock(entry, name));
-  }
-  return fragment;
-}
-
-function createCard(source) {
-  const result = results[source.id] ?? { state: "loading" };
-
-  const column = document.createElement("div");
-  column.className = selectedDay === ALL_WEEK ? "col-12 col-lg-6 col-xl-4" : "col-12 col-md-6 col-lg-4";
-
-  const card = document.createElement("article");
-  card.className = "card h-100";
-
-  const header = document.createElement("header");
-  header.className = "card-header d-flex justify-content-between align-items-center";
-  const title = document.createElement("h3");
-  title.className = "h5 mb-0";
-  const link = document.createElement("a");
-  link.href = source.website;
-  link.textContent = source.name;
-  link.target = "_blank";
-  link.rel = "noopener";
-  title.append(link);
-  header.append(title);
-
-  const body = document.createElement("div");
-  body.className = "card-body";
-
-  if (result.state === "loading") {
-    const spinner = document.createElement("div");
-    spinner.className = "spinner-border spinner-border-sm";
-    spinner.setAttribute("role", "status");
-    const label = document.createElement("span");
-    label.className = "visually-hidden";
-    label.textContent = "Načítava sa…";
-    spinner.append(label);
-    header.append(spinner);
-    body.textContent = "Načítavam denné menu…";
-  } else if (result.state === "error") {
-    body.classList.add("text-danger");
-    body.textContent = `Menu sa nepodarilo načítať (${result.error.message}). `;
-    const retry = document.createElement("button");
-    retry.type = "button";
-    retry.className = "btn btn-sm btn-outline-danger mt-2 d-block";
-    retry.textContent = "Skúsiť znova";
-    retry.addEventListener("click", () => loadOne(source).catch(() => {}));
-    body.append(retry);
-  } else {
-    body.append(createMenuContent(result.days));
-  }
-
-  const footer = document.createElement("footer");
-  footer.className = "card-footer small text-body-secondary";
-  if (result.updatedAt) {
-    footer.append("Aktualizované ");
-    const time = document.createElement("time");
-    time.dateTime = result.updatedAt.toISOString();
-    time.textContent = result.updatedAt.toLocaleString("sk-SK");
-    footer.append(time);
-  } else {
-    footer.textContent = "Zatiaľ nenačítané";
-  }
-
-  card.append(header, body, footer);
-  column.append(card);
-  return column;
-}
-
-function renderCards() {
-  dayLabel.textContent = selectedDay === ALL_WEEK ? "celý týždeň" : selectedDay;
-  const visible = SOURCES.filter((s) => !hiddenSources.has(s.id));
-  cards.replaceChildren(...visible.map(createCard));
-}
-
-function renderDayNav() {
-  const tabs = [...WORK_DAYS, ALL_WEEK];
-  dayNav.replaceChildren(...tabs.map((value) => {
-    const li = document.createElement("li");
-    li.className = "nav-item";
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "nav-link" + (value === selectedDay ? " active" : "");
-    button.textContent = value === ALL_WEEK ? "Celý týždeň" : value;
-    if (value === selectedDay) button.setAttribute("aria-current", "true");
-    button.addEventListener("click", () => {
-      selectedDay = value;
-      renderDayNav();
+async function loadOne(source, force = false) {
+  if (!force) {
+    const stored = readStored(source);
+    if (stored && stored.dayKey === todayKey()) {
+      results[source.id] = { state: "ok", days: stored.days, updatedAt: stored.updatedAt };
       renderCards();
-    });
-    li.append(button);
-    return li;
-  }));
-}
+      return;
+    }
+  }
 
-/* Filtre reštaurácií */
-for (const source of SOURCES) {
-  const label = document.createElement("label");
-  label.className = "form-check form-check-inline";
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.className = "form-check-input";
-  checkbox.checked = true;
-  checkbox.addEventListener("change", () => {
-    checkbox.checked ? hiddenSources.delete(source.id) : hiddenSources.add(source.id);
-    renderCards();
-  });
-  label.append(checkbox, ` ${source.name}`);
-  filters.append(label);
-}
-
-/* ---------- Načítanie ---------- */
-
-async function loadOne(source) {
-  const previous = results[source.id];
-  results[source.id] = { state: "loading", updatedAt: previous?.updatedAt };
+  const fallback = results[source.id]?.days ? results[source.id] : readStored(source);
+  results[source.id] = { state: "loading" };
   renderCards();
+
   try {
     const days = await loadSource(source);
-    results[source.id] = { state: "ok", days, updatedAt: new Date() };
+    const updatedAt = new Date();
+    results[source.id] = { state: "ok", days, updatedAt };
+    writeStored(source, days, updatedAt);
   } catch (error) {
-    results[source.id] = { state: "error", error, updatedAt: previous?.updatedAt };
+    results[source.id] = fallback
+      ? { state: "ok", days: fallback.days, updatedAt: fallback.updatedAt, warning: error.message }
+      : { state: "error", error };
     throw error;
   } finally {
     renderCards();
   }
 }
 
-async function loadAll() {
+async function loadAll(force = false) {
   refreshButton.disabled = true;
-  statusText.textContent = "Načítavam denné menu…";
-  const outcomes = await Promise.allSettled(SOURCES.map(loadOne));
-  const failed = outcomes.filter((o) => o.status === "rejected").length;
-  statusText.textContent = `Načítané ${SOURCES.length - failed} z ${SOURCES.length} reštaurácií.`;
+  cards.setAttribute("aria-busy", "true");
+  statusText.textContent = "Načítavam menu…";
+
+  const outcomes = await Promise.allSettled(SOURCES.map((source) => loadOne(source, force)));
+  const failed = outcomes.filter((outcome) => outcome.status === "rejected").length;
+
+  statusText.textContent = failed
+    ? `Načítané ${SOURCES.length - failed} z ${SOURCES.length} reštaurácií. Pri ${failed} sa vyskytla chyba.`
+    : `Menu je pripravené (${SOURCES.length} z ${SOURCES.length} reštaurácií).`;
+  cards.setAttribute("aria-busy", "false");
   refreshButton.disabled = false;
 }
 
+/* ---------- Vykresľovanie ---------- */
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function formatPrice(price) {
+  return `${price.toFixed(2).replace(".", ",")} €`;
+}
+
+function createItem(item) {
+  const li = el("li", "item");
+
+  const info = el("div");
+  info.append(el("span", "item-title", item.title));
+  const meta = [item.amount, item.allergens ? `alergény: ${item.allergens}` : ""].filter(Boolean).join(" · ");
+  if (meta) info.append(el("span", "item-meta", meta));
+  li.append(info);
+
+  if (typeof item.price === "number") li.append(el("span", "price", formatPrice(item.price)));
+  return li;
+}
+
+function createGroup(type, label, items) {
+  if (items.length === 0) return null;
+  const group = el("div", `group group-${type}`);
+  group.append(el("p", "group-label", label));
+  const list = el("ul", "items");
+  list.append(...items.map(createItem));
+  group.append(list);
+  return group;
+}
+
+function createDayBlock(entry, dayName, showHeading) {
+  const block = el("section", "day-block");
+
+  if (showHeading) {
+    const heading = el("h4", "day-heading", dayName);
+    if (entry?.date) heading.append(createTime(entry.date));
+    if (dayName === todayName) heading.append(el("span", "badge", "dnes"));
+    block.append(heading);
+  } else if (entry?.date) {
+    const line = el("p", "day-date");
+    line.append(createTime(entry.date));
+    block.append(line);
+  }
+
+  const items = entry?.items ?? [];
+  if (items.length === 0) {
+    block.append(el("p", "empty", "Menu na tento deň nie je k dispozícii."));
+    return block;
+  }
+
+  const soups = createGroup("soup", "Polievka", items.filter((item) => item.type === "soup"));
+  const mains = createGroup("main", "Hlavné jedlá", items.filter((item) => item.type !== "soup"));
+  block.append(...[soups, mains].filter(Boolean));
+  return block;
+}
+
+function createTime(dateText) {
+  const time = el("time", "", dateText);
+  const match = dateText.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})?/);
+  if (match) {
+    const year = match[3] || new Date().getFullYear();
+    time.dateTime = `${year}-${match[2].padStart(2, "0")}-${match[1].padStart(2, "0")}`;
+  }
+  return time;
+}
+
+function createMenuContent(days) {
+  const week = selectedDay === ALL_WEEK;
+  const names = week ? WORK_DAYS : [selectedDay];
+  const fragment = document.createDocumentFragment();
+  for (const name of names) {
+    const entry = days.find((day) => day.day.toLowerCase() === name.toLowerCase());
+    fragment.append(createDayBlock(entry, name, week));
+  }
+  return fragment;
+}
+
+function createCard(source) {
+  const result = results[source.id] ?? { state: "empty" };
+
+  const card = el("article", "card");
+
+  const header = el("header", "card-header");
+  const title = el("h3", "card-title");
+  const link = el("a", "", source.name);
+  link.href = source.website;
+  link.target = "_blank";
+  link.rel = "noopener";
+  title.append(link);
+  if (result.state === "loading") {
+    const spinner = el("span", "spinner");
+    spinner.setAttribute("role", "status");
+    spinner.setAttribute("aria-label", "Načítava sa");
+    title.append(spinner);
+  }
+  header.append(title);
+  if (source.address) header.append(el("address", "card-address", source.address));
+
+  const body = el("div", "card-body");
+  if (result.state === "loading") {
+    body.append(el("p", "message-info", "Načítavam denné menu…"));
+  } else if (result.state === "error") {
+    const box = el("div", "message-error");
+    box.append(el("p", "", `Menu sa nepodarilo načítať. ${result.error.message}`));
+    const retry = el("button", "btn btn-ghost", "Skúsiť znova");
+    retry.type = "button";
+    retry.addEventListener("click", () => loadOne(source, true).catch(() => {}));
+    box.append(retry);
+    body.append(box);
+  } else if (result.state === "ok") {
+    if (result.warning) {
+      body.append(el("p", "message-warn", `Aktualizácia zlyhala (${result.warning}) Zobrazujú sa predtým uložené dáta.`));
+    }
+    body.append(createMenuContent(result.days));
+  } else {
+    body.append(el("p", "message-info", "Dáta nie sú načítané. Kliknite na „Aktualizovať menu“."));
+  }
+
+  const footer = el("footer", "card-footer");
+  if (result.updatedAt) {
+    footer.append("Naposledy aktualizované: ");
+    const time = el("time", "", result.updatedAt.toLocaleString("sk-SK"));
+    time.dateTime = result.updatedAt.toISOString();
+    footer.append(time);
+  } else {
+    footer.textContent = "Zatiaľ neaktualizované";
+  }
+
+  card.append(header, body, footer);
+  return card;
+}
+
+function renderCards() {
+  dayLabel.textContent = selectedDay === ALL_WEEK ? "celý týždeň" : selectedDay;
+  const visible = SOURCES.filter((source) => !hiddenSources.has(source.id));
+  if (visible.length === 0) {
+    cards.replaceChildren(el("p", "empty", "Nie je vybraná žiadna reštaurácia. Zapnite aspoň jednu vo filtri."));
+    return;
+  }
+  cards.replaceChildren(...visible.map(createCard));
+}
+
+function renderDayNav() {
+  const tabs = [...WORK_DAYS, ALL_WEEK];
+  dayNav.replaceChildren(
+    ...tabs.map((value) => {
+      const li = el("li");
+      const button = el("button", "", value === ALL_WEEK ? "Celý týždeň" : value);
+      button.type = "button";
+      if (value === selectedDay) button.setAttribute("aria-current", "true");
+      if (value === todayName) button.append(el("span", "today-mark", "dnes"));
+      button.addEventListener("click", () => {
+        selectedDay = value;
+        renderDayNav();
+        renderCards();
+      });
+      li.append(button);
+      return li;
+    })
+  );
+}
+
+function renderFilters() {
+  for (const source of SOURCES) {
+    const label = el("label");
+    const checkbox = el("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = true;
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) hiddenSources.delete(source.id);
+      else hiddenSources.add(source.id);
+      renderCards();
+    });
+    label.append(checkbox, source.name);
+    filters.append(label);
+  }
+}
+
+/* ---------- Udalosti a štart ---------- */
+
+refreshButton.addEventListener("click", () => loadAll(true));
+
+clearButton.addEventListener("click", () => {
+  clearStored();
+  for (const source of SOURCES) results[source.id] = { state: "empty" };
+  renderCards();
+  statusText.textContent = "Uložené dáta boli vymazané.";
+});
+
+const todayTime = document.getElementById("today-time");
+todayTime.dateTime = todayKey();
+todayTime.textContent = `${todayName} ${now.toLocaleDateString("sk-SK")}`;
+weekendNote.hidden = !isWeekend;
+
+renderFilters();
 renderDayNav();
-loadAll();
+renderCards();
+loadAll(false);
