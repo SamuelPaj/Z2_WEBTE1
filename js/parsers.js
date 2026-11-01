@@ -1,8 +1,10 @@
 "use strict";
 
-
 const DAY_NAMES = ["Pondelok", "Utorok", "Streda", "Štvrtok", "Piatok", "Sobota", "Nedeľa"];
 
+function parseHtml(htmlText) {
+  return new DOMParser().parseFromString(htmlText, "text/html");
+}
 
 function cleanText(value) {
   return (value || "").replace(/\s+/g, " ").trim();
@@ -22,6 +24,7 @@ function dayIndex(name) {
   return DAY_NAMES.findIndex((day) => day.toLowerCase() === wanted);
 }
 
+/* Veľké písmená zmení na vetu: "KURACIE PRSIA" → "Kuracie prsia". */
 function sentenceCase(value) {
   const letters = value.replace(/[^\p{L}]/gu, "");
   const upper = letters.replace(/[^\p{Lu}]/gu, "");
@@ -50,7 +53,6 @@ function buildItem(type, rawText, price) {
   const { title, allergens } = splitAllergens(afterAmount);
   return { type, title: sentenceCase(title), amount, allergens, price };
 }
-
 
 function parseDrag(doc) {
   const panes = { pondelok: "Pondelok", utorok: "Utorok", streda: "Streda", stvrtok: "Štvrtok", piatok: "Piatok" };
@@ -90,7 +92,6 @@ function parseDrag(doc) {
   }
   return days;
 }
-
 
 function parseHospoda(doc) {
   const days = [];
@@ -138,7 +139,7 @@ const SOURCES = [
     name: "Reštaurácia Drag",
     address: "Staré Grunty 64, Bratislava",
     website: "https://www.restauracia-drag.sk/denne-menu",
-    localUrl: "Reštaurácia_DRAG_menu.html",
+    localUrl: "source/restauracia-drag.html",
     parse: parseDrag
   },
   {
@@ -146,7 +147,7 @@ const SOURCES = [
     name: "Naše Hospoda Karloveská",
     address: "Segnerova 3, Bratislava – Karlova Ves",
     website: "https://nasehospoda-karloveska.sk/#menu",
-    localUrl: "Naše_Hospoda_Karloveská___menu.html",
+    localUrl: "source/nasa-hospoda.html",
     parse: parseHospoda
   }
 ];
