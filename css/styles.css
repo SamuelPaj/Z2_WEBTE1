@@ -59,7 +59,6 @@ main {
   outline-offset: 2px;
 }
 
-/* ---------- Hlavička ---------- */
 .site-header {
   background: var(--blue);
   color: #fff;
@@ -112,7 +111,6 @@ main {
   font-weight: 600;
 }
 
-/* ---------- Panel s ovládaním ---------- */
 .toolbar {
   background: var(--card);
   border: 1px solid var(--line);
@@ -263,7 +261,6 @@ main {
   font-size: 1.4rem;
 }
 
-/* ---------- Karty ---------- */
 .cards {
   display: grid;
   gap: 1.25rem;
@@ -481,7 +478,6 @@ main {
   }
 }
 
-/* ---------- Pätička a podstránka ---------- */
 .site-footer {
   background: var(--blue-dark);
   color: #cfe0f1;
