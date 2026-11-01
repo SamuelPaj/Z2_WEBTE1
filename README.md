@@ -10,11 +10,15 @@ Autor: Samuel Piteľ
 
 | Reštaurácia | Pôvodná stránka | Lokálna kópia |
 |---|---|---|
-| Reštaurácia Drag | https://www.restauracia-drag.sk/denne-menu | `source/Reštaurácia_DRAG_menu.html` |
-| Naše Hospoda Karloveská | https://nasehospoda-karloveska.sk/#menu | `source/Naše Hospoda Karloveská _ Bratislava - Karlova Ves.html` |
-| Jedna Báseň | https://www.jednabasen.sk/restauracja/jedna-basen-karlova-ves | `source/Jedna_basen_menu.html` |
+| Reštaurácia Drag | https://www.restauracia-drag.sk/restauracia-drag | `source/Reštaurácia_DRAG_menu.html` |
+| Naše Hospoda Karloveská | https://nasehospoda-karloveska.sk/ | `source/Naše Hospoda Karloveská _ Bratislava - Karlova Ves.html` |
+| Jedna Báseň | https://www.jednabasen.sk/ | `source/Jedna_basen_menu.html` |
 
 Podľa spresnenia k bodu (3) sa načítavajú lokálne kópie stránok, proxy sa nepoužíva.
+
+Stránka Drag dátumy neuvádza, preto sa dopočítajú z týždňa načítania
+(pondelok až piatok, cez víkend nasledujúceho týždňa). Hospoda a Jedna Báseň
+dátumy uvádzajú a preberajú sa priamo zo stránky.
 
 ## Spustenie
 
