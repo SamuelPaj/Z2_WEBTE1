@@ -24,7 +24,6 @@ function dayIndex(name) {
   return DAY_NAMES.findIndex((day) => day.toLowerCase() === wanted);
 }
 
-/* Veľké písmená zmení na vetu: "KURACIE PRSIA" → "Kuracie prsia". */
 function sentenceCase(value) {
   const letters = value.replace(/[^\p{L}]/gu, "");
   const upper = letters.replace(/[^\p{Lu}]/gu, "");
@@ -54,8 +53,6 @@ function buildItem(type, rawText, price) {
   return { type, title: sentenceCase(title), amount, allergens, price };
 }
 
-/* Stránka Drag dátumy neuvádza, preto sa dopočítajú z týždňa načítania:
-   pondelok až piatok aktuálneho týždňa, cez víkend nasledujúceho týždňa. */
 function weekDate(dayOffset, now = new Date()) {
   const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const sinceMonday = (date.getDay() + 6) % 7; // pondelok = 0, nedeľa = 6
@@ -87,7 +84,6 @@ function parseDrag(doc) {
       if (node.classList.contains("menu_box_title")) {
         section = /polievk/i.test(node.textContent) ? "soup" : "main";
       } else if (section === "soup" && node.tagName !== "SCRIPT" && node.tagName !== "TABLE") {
-        // polievka môže byť v <span> alebo <p>
         const line = textOf(node);
         if (line) items.push(buildItem("soup", line, null));
       } else if (node.tagName === "TABLE") {
@@ -143,7 +139,6 @@ function parseHospoda(doc) {
   return days;
 }
 
-/* Alergény v tvare "/A:1,3,7/" (aj chybné varianty "/A1,3/", "/A: /") na konci textu. */
 function extractAllergens(value) {
   const match = value.match(/\s*\/\s*A\s*:?\s*([\d,\s]*)\/?\s*$/i);
   if (!match) return { text: value, allergens: "" };
@@ -153,7 +148,6 @@ function extractAllergens(value) {
   };
 }
 
-/* Cena z tlačidla: "od €8,20", "€10,90" alebo "od €8". */
 function parseEuroPrice(value) {
   const match = (value || "").match(/€\s*(\d+(?:[.,]\d+)?)/);
   return match ? parseFloat(match[1].replace(",", ".")) : null;
@@ -170,7 +164,6 @@ function parseJednaBasen(doc) {
 
     const items = [];
 
-    // polievky sú v popise skupiny, oddelené značkami <br>
     const description = section.querySelector(".m-list__description");
     if (description) {
       const walker = document.createTreeWalker(description, NodeFilter.SHOW_TEXT);
@@ -189,7 +182,6 @@ function parseJednaBasen(doc) {
       }
     }
 
-    // hlavné jedlá sú v zozname položiek
     section.querySelectorAll("li.m-list__item").forEach((li) => {
       const titleEl = li.querySelector(".m-item__title");
       if (!titleEl) return;
