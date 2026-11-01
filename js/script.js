@@ -57,6 +57,7 @@ function clearStored() {
     try {
       localStorage.removeItem(STORAGE_PREFIX + source.id);
     } catch {
+      /* ignorujeme */
     }
   }
 }
@@ -64,6 +65,7 @@ function clearStored() {
 async function loadSource(source) {
   let html;
   try {
+    // jQuery AJAX: lokálna kópia stránky sa načíta asynchrónne ako text
     html = await $.ajax({ url: source.localUrl, method: "GET", dataType: "text", cache: false });
   } catch (jqXHR) {
     if (jqXHR && jqXHR.status) {
@@ -331,7 +333,10 @@ $clearButton.on("click", () => {
 });
 
 $(function () {
-  $("#today-time").attr("datetime", todayKey()).text(`${todayName} ${now.toLocaleDateString("sk-SK")}`);
+  // <time> sa vytvára skriptom, prázdny <time> v HTML by neprešiel validátorom
+  $("#today-label").empty().append(
+    $("<time>", { datetime: todayKey(), text: `${todayName} ${now.toLocaleDateString("sk-SK")}` })
+  );
   $weekendNote.prop("hidden", !isWeekend);
 
   renderFilters();
