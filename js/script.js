@@ -5,19 +5,6 @@ const ALL_WEEK = "all";
 const STORAGE_PREFIX = "obedove-menu:";
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-const statusText = document.getElementById("status");
-const refreshButton = document.getElementById("refresh");
-const clearButton = document.getElementById("clear");
-const cards = document.getElementById("cards");
-const filters = document.getElementById("filters");
-const dayNav = document.getElementById("day-nav");
-const dayLabel = document.getElementById("selected-day-label");
-const weekendNote = document.getElementById("weekend-note");
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 const $statusText = $("#status");
 const $refreshButton = $("#refresh");
 const $clearButton = $("#clear");
@@ -26,10 +13,6 @@ const $filters = $("#filters");
 const $dayNav = $("#day-nav");
 const $dayLabel = $("#selected-day-label");
 const $weekendNote = $("#weekend-note");
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
 const now = new Date();
 const todayIndex = (now.getDay() + 6) % 7;
@@ -80,22 +63,6 @@ function clearStored() {
 }
 
 async function loadSource(source) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  let response;
-  try {
-    response = await fetch(source.localUrl);
-  } catch {
-    throw new Error("Stránka reštaurácie je momentálne nedostupná.");
-  }
-  if (!response.ok) {
-    throw new Error(`Stránka reštaurácie je nedostupná (chyba ${response.status}).`);
-  }
-
-  const doc = parseHtml(await response.text());
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   let html;
   try {
     // jQuery AJAX: lokálna kópia stránky sa načíta asynchrónne ako text
@@ -108,10 +75,6 @@ async function loadSource(source) {
   }
 
   const doc = parseHtml(html);
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
   let days;
   try {
@@ -155,35 +118,13 @@ async function loadOne(source, force = false) {
 }
 
 async function loadAll(force = false) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  refreshButton.disabled = true;
-  cards.setAttribute("aria-busy", "true");
-  statusText.textContent = "Načítavam menu…";
-=======
   $refreshButton.prop("disabled", true);
   $cards.attr("aria-busy", "true");
   $statusText.text("Načítavam menu…");
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-  $refreshButton.prop("disabled", true);
-  $cards.attr("aria-busy", "true");
-  $statusText.text("Načítavam menu…");
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
   const outcomes = await Promise.allSettled(SOURCES.map((source) => loadOne(source, force)));
   const failed = outcomes.filter((outcome) => outcome.status === "rejected").length;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  statusText.textContent = failed
-    ? `Načítané ${SOURCES.length - failed} z ${SOURCES.length} reštaurácií. Pri ${failed} sa vyskytla chyba.`
-    : `Menu je pripravené (${SOURCES.length} z ${SOURCES.length} reštaurácií).`;
-  cards.setAttribute("aria-busy", "false");
-  refreshButton.disabled = false;
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   $statusText.text(
     failed
       ? `Načítané ${SOURCES.length - failed} z ${SOURCES.length} reštaurácií. Pri ${failed} sa vyskytla chyba.`
@@ -191,10 +132,6 @@ async function loadAll(force = false) {
   );
   $cards.attr("aria-busy", "false");
   $refreshButton.prop("disabled", false);
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 function el(tag, className, text) {
@@ -237,15 +174,7 @@ function createDayBlock(entry, dayName, showHeading) {
   if (showHeading) {
     const heading = el("h4", "day-heading", dayName);
     if (entry?.date) heading.append(createTime(entry.date));
-<<<<<<< HEAD
-<<<<<<< HEAD
-    if (dayName === todayName) heading.append(el("span", "badge", "dnes"));
-=======
     if (dayName === todayName) heading.append(el("span", "badge rounded-pill text-bg-primary", "dnes"));
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-    if (dayName === todayName) heading.append(el("span", "badge rounded-pill text-bg-primary", "dnes"));
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     block.append(heading);
   } else if (entry?.date) {
     const line = el("p", "day-date");
@@ -299,15 +228,7 @@ function createCard(source) {
   link.rel = "noopener";
   title.append(link);
   if (result.state === "loading") {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    const spinner = el("span", "spinner");
-=======
     const spinner = el("span", "spinner-border spinner-border-sm text-primary");
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-    const spinner = el("span", "spinner-border spinner-border-sm text-primary");
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     spinner.setAttribute("role", "status");
     spinner.setAttribute("aria-label", "Načítava sa");
     title.append(spinner);
@@ -319,41 +240,19 @@ function createCard(source) {
   if (result.state === "loading") {
     body.append(el("p", "message-info", "Načítavam denné menu…"));
   } else if (result.state === "error") {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    const box = el("div", "message-error");
-    box.append(el("p", "", `Menu sa nepodarilo načítať. ${result.error.message}`));
-    const retry = el("button", "btn btn-ghost", "Skúsiť znova");
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     const box = el("div", "alert alert-danger");
     box.setAttribute("role", "alert");
     box.append(el("p", "", `Menu sa nepodarilo načítať. ${result.error.message}`));
     const retry = el("button", "btn btn-outline-primary btn-sm", "Skúsiť znova");
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     retry.type = "button";
     retry.addEventListener("click", () => loadOne(source, true).catch(() => {}));
     box.append(retry);
     body.append(box);
   } else if (result.state === "ok") {
     if (result.warning) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      body.append(el("p", "message-warn", `Aktualizácia zlyhala (${result.warning}) Zobrazujú sa predtým uložené dáta.`));
-=======
       const warn = el("div", "alert alert-warning", `Aktualizácia zlyhala (${result.warning}) Zobrazujú sa predtým uložené dáta.`);
       warn.setAttribute("role", "alert");
       body.append(warn);
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-      const warn = el("div", "alert alert-warning", `Aktualizácia zlyhala (${result.warning}) Zobrazujú sa predtým uložené dáta.`);
-      warn.setAttribute("role", "alert");
-      body.append(warn);
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     }
     body.append(createMenuContent(result.days));
   } else {
@@ -371,22 +270,6 @@ function createCard(source) {
   }
 
   card.append(header, body, footer);
-<<<<<<< HEAD
-<<<<<<< HEAD
-  return card;
-}
-
-function renderCards() {
-  dayLabel.textContent = selectedDay === ALL_WEEK ? "celý týždeň" : selectedDay;
-  const visible = SOURCES.filter((source) => !hiddenSources.has(source.id));
-  if (visible.length === 0) {
-    cards.replaceChildren(el("p", "empty", "Nie je vybraná žiadna reštaurácia. Zapnite aspoň jednu vo filtri."));
-    return;
-  }
-  cards.replaceChildren(...visible.map(createCard));
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 
   const column = el("div", "col-12 col-md-6 col-xl");
   column.append(card);
@@ -403,27 +286,10 @@ function renderCards() {
     return;
   }
   $cards.empty().append(visible.map(createCard));
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
 }
 
 function renderDayNav() {
   const tabs = [...WORK_DAYS, ALL_WEEK];
-<<<<<<< HEAD
-<<<<<<< HEAD
-  dayNav.replaceChildren(
-    ...tabs.map((value) => {
-      const li = el("li");
-      const button = el("button", "", value === ALL_WEEK ? "Celý týždeň" : value);
-      button.type = "button";
-      if (value === selectedDay) button.setAttribute("aria-current", "true");
-      if (value === todayName) button.append(el("span", "today-mark", "dnes"));
-      button.addEventListener("click", () => {
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   $dayNav.empty().append(
     tabs.map((value) => {
       const $button = $("<button>", {
@@ -434,67 +300,16 @@ function renderDayNav() {
       if (value === selectedDay) $button.attr("aria-current", "true");
       if (value === todayName) $button.append($("<span>", { class: "today-mark", text: "dnes" }));
       $button.on("click", () => {
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
         selectedDay = value;
         renderDayNav();
         renderCards();
       });
-<<<<<<< HEAD
-<<<<<<< HEAD
-      li.append(button);
-      return li;
-=======
       return $("<li>", { class: "nav-item" }).append($button)[0];
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
-      return $("<li>", { class: "nav-item" }).append($button)[0];
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
     })
   );
 }
 
 function renderFilters() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-  for (const source of SOURCES) {
-    const label = el("label");
-    const checkbox = el("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = true;
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) hiddenSources.delete(source.id);
-      else hiddenSources.add(source.id);
-      renderCards();
-    });
-    label.append(checkbox, source.name);
-    filters.append(label);
-  }
-}
-
-refreshButton.addEventListener("click", () => loadAll(true));
-
-clearButton.addEventListener("click", () => {
-  clearStored();
-  for (const source of SOURCES) results[source.id] = { state: "empty" };
-  renderCards();
-  statusText.textContent = "Uložené dáta boli vymazané.";
-});
-
-const todayTime = document.getElementById("today-time");
-todayTime.dateTime = todayKey();
-todayTime.textContent = `${todayName} ${now.toLocaleDateString("sk-SK")}`;
-weekendNote.hidden = !isWeekend;
-
-renderFilters();
-renderDayNav();
-renderCards();
-loadAll(false);
-=======
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
   SOURCES.forEach((source) => {
     const inputId = `filter-${source.id}`;
     const $input = $("<input>", { type: "checkbox", class: "form-check-input", id: inputId, checked: true, role: "switch" });
@@ -526,7 +341,3 @@ $(function () {
   renderCards();
   loadAll(false);
 });
-<<<<<<< HEAD
->>>>>>> 2ea2af6 (Pridanie Zadanie 2)
-=======
->>>>>>> 490480740136fd087f996bc64287e63e7fbd71c5
