@@ -1,12 +1,9 @@
 "use strict";
-/* Obedové menu v okolí fakulty – WEBTE1, Samuel Piteľ
-   Zoznam reštaurácií a parsery sú v restaurants.js (SOURCES, DAY_NAMES). */
 
 const WORK_DAYS = DAY_NAMES.slice(0, 5);
 const ALL_WEEK = "all";
 const STORAGE_PREFIX = "obedove-menu:";
 
-/* ---------- Prvky stránky ---------- */
 
 const statusText = document.getElementById("status");
 const refreshButton = document.getElementById("refresh");
@@ -16,8 +13,6 @@ const filters = document.getElementById("filters");
 const dayNav = document.getElementById("day-nav");
 const dayLabel = document.getElementById("selected-day-label");
 const weekendNote = document.getElementById("weekend-note");
-
-/* ---------- Stav ---------- */
 
 const now = new Date();
 const todayIndex = (now.getDay() + 6) % 7;
@@ -29,10 +24,8 @@ const results = {};
 const hiddenSources = new Set();
 
 function todayKey() {
-  return new Date().toLocaleDateString("sv-SE"); // RRRR-MM-DD v lokálnom čase
+  return new Date().toLocaleDateString("sv-SE");
 }
-
-/* ---------- localStorage ---------- */
 
 function readStored(source) {
   try {
@@ -44,7 +37,7 @@ function readStored(source) {
     if (Number.isNaN(updatedAt.getTime())) return null;
     return { days: data.days, updatedAt, dayKey: data.dayKey };
   } catch {
-    return null; // poškodené dáta alebo zakázané úložisko
+    return null; 
   }
 }
 
@@ -55,7 +48,7 @@ function writeStored(source, days, updatedAt) {
       JSON.stringify({ days, updatedAt: updatedAt.toISOString(), dayKey: todayKey() })
     );
   } catch {
-    /* plné alebo nedostupné úložisko – stránka funguje aj bez ukladania */
+    
   }
 }
 
@@ -69,8 +62,6 @@ function clearStored() {
   }
 }
 
-/* ---------- Načítanie a spracovanie ---------- */
-
 async function loadSource(source) {
   let response;
   try {
@@ -82,7 +73,7 @@ async function loadSource(source) {
     throw new Error(`Stránka reštaurácie je nedostupná (chyba ${response.status}).`);
   }
 
-  const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+  const doc = parseHtml(await response.text());
 
   let days;
   try {
@@ -139,8 +130,6 @@ async function loadAll(force = false) {
   cards.setAttribute("aria-busy", "false");
   refreshButton.disabled = false;
 }
-
-/* ---------- Vykresľovanie ---------- */
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -224,7 +213,7 @@ function createMenuContent(days) {
 }
 
 function createCard(source) {
-  const result = results[source.id] ?? { state: "empty" };
+  const result = results[source.id] ?? { state: "loading" };
 
   const card = el("article", "card");
 
@@ -323,8 +312,6 @@ function renderFilters() {
     filters.append(label);
   }
 }
-
-/* ---------- Udalosti a štart ---------- */
 
 refreshButton.addEventListener("click", () => loadAll(true));
 
