@@ -165,7 +165,7 @@ function createGroup(type, label, items) {
   return group;
 }
 
-function createDayBlock(entry, dayName, showHeading) {
+function createDayBlock(entry, dayName, showHeading, shownImages = new Set()) {
   const block = el("section", "day-block");
 
   if (showHeading) {
@@ -185,10 +185,38 @@ function createDayBlock(entry, dayName, showHeading) {
     return block;
   }
 
+  const images = items.filter((item) => item.type === "image");
+  if (images.length > 0) {
+    for (const image of images) {
+      if (shownImages.has(image.src)) {
+        block.append(el("p", "empty", "Týždenné menu je zobrazené pri prvom dni."));
+      } else {
+        shownImages.add(image.src);
+        block.append(createImage(image));
+      }
+    }
+    return block;
+  }
+
   const soups = createGroup("soup", "Polievka", items.filter((item) => item.type === "soup"));
   const mains = createGroup("main", "Hlavné jedlá", items.filter((item) => item.type !== "soup"));
   block.append(...[soups, mains].filter(Boolean));
   return block;
+}
+
+function createImage(item) {
+  const figure = el("figure", "menu-image");
+  const link = el("a");
+  link.href = item.src;
+  link.target = "_blank";
+  link.rel = "noopener";
+  const img = el("img");
+  img.src = item.src;
+  img.alt = item.title;
+  img.loading = "lazy";
+  link.append(img);
+  figure.append(link, el("figcaption", "", "Menu je na webe reštaurácie zverejnené ako obrázok. Kliknutím ho zväčšíte."));
+  return figure;
 }
 
 function createTime(dateText) {
@@ -205,9 +233,10 @@ function createMenuContent(days) {
   const week = selectedDay === ALL_WEEK;
   const names = week ? WORK_DAYS : [selectedDay];
   const fragment = document.createDocumentFragment();
+  const shownImages = new Set(); // týždenný obrázok sa v zobrazení celého týždňa ukáže len raz
   for (const name of names) {
     const entry = days.find((day) => day.day.toLowerCase() === name.toLowerCase());
-    fragment.append(createDayBlock(entry, name, week));
+    fragment.append(createDayBlock(entry, name, week, shownImages));
   }
   return fragment;
 }
